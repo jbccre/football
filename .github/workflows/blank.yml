@@ -17,7 +17,7 @@ jobs:
          
       - name: Install dependencies
         run: |
-          install.packages(c("devtools","scales","dplyr","poibin","tidyr","ggplot2","DT"))
+          install.packages(c("devtools","scales","dplyr","poibin","tidyr","ggplot2","DT","remotes"))
         shell: Rscript {0}
         
       - name: run code
