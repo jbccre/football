@@ -125,22 +125,13 @@ winners_losers <- games |>
   group_by(value) |>
   summarise(won=sum(name=="winner"),lost=sum(name=="loser"))
 
-historical_plot <- ggplot(historicalprobs, aes(x = day, y = prob, color=bracketname, group=bracketname,text = label)) +
-  geom_line() +
-  scale_y_continuous(labels=scales::percent) 
-
 teams_table <- left_join(tibble(value=all_teams$team[match(team_ids, all_teams$id)]),winners_losers) |>
   mutate(won = ifelse(is.na(won),0,won)) |>
   mutate(lost = ifelse(is.na(lost),0,lost)) |>
   mutate(cutoff = c(7.5,4.5,5.5,7.5,8.5,10.5,9.5,7.5,7.5,5.5,7.5,6.5,9.5,7.5,7.5,7.5,8.5,6.5,7.5,5.5)) |>
   mutate(probability_over = paste0(sprintf("%.2f",100*output$prob[output$day==max(output$day)]),"%")) |>
   mutate(probability_under = paste0(sprintf("%.2f",100*(1-output$prob[output$day==max(output$day)])),"%")) |>
-  mutate(points = c(rep(2,times=5),rep(1,times=15))) |>
-  datatable(
-    colnames = c("Team", "Games Won", "Games Lost", "Cutoff",  'Probability of Over', 'Probability of Under', "Points"),
-    rownames = FALSE, escape = FALSE, options = list(paging=FALSE,searching=FALSE,info=FALSE,scrollY='300px', scrollX= TRUE, pageLength=10)
-  ) |>
-  formatStyle(columns=2:7,textAlign='right')
+  mutate(points = c(rep(2,times=5),rep(1,times=15)))
 
 players_table <- qualtrics_transformed |>
   relocate(name, .before=1) |>
@@ -148,15 +139,6 @@ players_table <- qualtrics_transformed |>
   left_join({historicalprobs |> filter(day==max(day)) |> arrange(desc(prob)) |> mutate(rank = match(prob, prob)) |> mutate(label=gsub(".*:","",label)) |>  mutate(expected_value = prob*5*25) |> select(name=bracketname, rank, prob=label, expected_value)}) |>
   arrange(rank) |>
   relocate(c(name,rank,prob,expected_value),.before=1) |>
-  mutate(expected_value = paste0("$",sprintf("%.2f",expected_value))) |>
-  datatable(
-    colnames=c("Bracket","Rank","Probability","Expected Value", team_names),
-    rownames = FALSE, options = list(paging=FALSE,searching=FALSE,info=FALSE,scrollX=TRUE,scrollY='300px')
-  ) |>
-  formatStyle(
-    columns = 2:29,
-    textAlign = 'right',
-    backgroundColor = styleEqual(c(">", "<"), c("lightgreen", "#ff9999"))
-  )
+  mutate(expected_value = paste0("$",sprintf("%.2f",expected_value)))
 
-save(players_table, teams_table, historical_plot, file = 'github.Rdata')
+save(historicalprobs, teams_table, players_table, file = 'github.Rdata')
