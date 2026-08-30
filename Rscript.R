@@ -1,6 +1,8 @@
 devtools::install_github("sportsdataverse/cfbfastR")
 library(cfbfastR)
-register_cfbd(Sys.getenv("CFBD_API_KEY"))
+if (Sys.getenv("CFBD_API_KEY") == "") {
+  stop("CFBD_API_KEY is missing from the environment!")
+}
 library(dplyr) 
 library(poibin) # poisson normal distribution
 library(tidyr) 
