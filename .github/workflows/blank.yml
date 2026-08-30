@@ -22,7 +22,7 @@ jobs:
      - name: Install dependencies
        run: |
          install.packages(c("devtools","scales","dplyr","poibin","tidyr","ggplot2","DT"))
-        shell: Rscript {0}
+       shell: Rscript {0}
         
       - name: run code
         env:
