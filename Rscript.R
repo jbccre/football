@@ -141,4 +141,4 @@ players_table <- qualtrics_transformed |>
   relocate(c(name,rank,prob,expected_value),.before=1) |>
   mutate(expected_value = paste0("$",sprintf("%.2f",expected_value)))
 
-save(historicalprobs, teams_table, players_table, file = 'github.Rdata')
+save(historicalprobs, teams_table, players_table, team_names, file = 'github.Rdata')
