@@ -12,7 +12,8 @@ qualtrics_transformed <- read.csv('qualtrics_transformed.csv')
 Sys.getenv("CFBD_API_KEY")
 current_date <- as.Date(gsub(" .*","",format(Sys.time(), tz = "America/Chicago", usetz=TRUE)))
 team_ids <- c(145,344,66,235,99,2483,251,248,21,154,57,142,194,201,228,2633,333,2579,2294,77) # relevant teams in Qualtrics order
-schedule <- load_cfb_schedules(2026)all_teams <- 
+schedule <- load_cfb_schedules(2026)
+all_teams <- 
 schedule |> filter(season_type=='regular') |>
   select(season_type, start_date, id=home_id, team=home_team, elo=home_pregame_elo) |>
   mutate(type = 'home') |>
