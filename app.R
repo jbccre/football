@@ -28,7 +28,7 @@ players_table <- datatable(players_table,
 
 ui <- fluidPage(
   titlePanel("Football Madness 2026"),
-  p("A product of the University of Memphis, Center for Community Research and Evaluation"),
+  p('A product of the University of Memphis, Center for Community Research and Evaluation. Click ',tags$a(href="https://github.com/jbccre/football",target="_blank","here"),"for code."),
   hr(),
   h3("Probability Over Time"),
   p("View each player's probability of winning Football Madness over the course of the tournament."),
