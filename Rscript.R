@@ -6,7 +6,7 @@ library(tidyr)
 library(ggplot2)
 library(DT)
 
-load(scenarioWinners.Rdata)
+load("scenarioWinners.Rdata")
 qualtrics <- read.csv('qualtrics.csv')
 qualtrics_transformed <- read.csv('qualtrics_transformed.csv')
 Sys.getenv("CFBD_API_KEY")
