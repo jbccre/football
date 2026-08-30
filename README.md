@@ -1,4 +1,4 @@
-Football Madness!
+**Football Madness!**
 
 Dashboard available at: https://ccre.shinyapps.io/football/
 
@@ -11,6 +11,7 @@ Files:
 - github.Rdata: the output of Rscript.R, used for the dashboard
 - app.R: the dashboard code
 
+Methods:
 - The probability of a team exceeding the cutoff ("over" 7.5, for example) is calculated using a Poisson binomial distribution, where each unknown game probability is calculated based on ELO ratings available in the above named API. If you do not know what an ELO rating is, go here: https://en.wikipedia.org/wiki/Elo_rating_system. Known game probabilities are, of course, 1 if won and 0 if lost.
 - The pregame ELO when available. If imputed, the following rules are used:
   - Sometimes, FCS teams play FBS teams where no ELO is reported. We assume an ELO of 1300 for those teams per standard practice (FiveThirtyEight).
