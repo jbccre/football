@@ -7,7 +7,7 @@ Dashboard is updated "on demand"; we may convert this to automatic every few hou
 **Files:**
 - run_once.R: code once run to identify all 1,048,576 (2^20) outcomes for our 20 games and who wins each, as well as process the submissions
 - scenarioWinners.Rdata, qualtrics.csv, qualtrics_transformed.csv: output from run_once.R
-- Rscript.R: run on demand to run the probabilities. runs the current probabilities as well as (re)calculates prior probabilities for previous days. this uses the API available at: https://collegefootballdata.com/
+- Rscript.R: run on demand to run the probabilities. runs the current probabilities as well as (re)calculates prior probabilities for previous days. this uses the API available at: https://collegefootballdata.com/. This API identifies game outcomes as well as ELO ratings indicating the strength of each team which is used to calculate probabilities.
 - github.Rdata: the output of Rscript.R, used for the dashboard
 - app.R: the dashboard code
 
