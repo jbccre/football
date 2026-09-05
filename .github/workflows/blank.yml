@@ -2,6 +2,9 @@ name: run R code to make objects for dashboard
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '0 19,21,23 * * 6'
+    - cron: '0 1,3,5,7 * * 0'
 
 jobs:
   run-r-script:
