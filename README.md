@@ -1,6 +1,6 @@
 **Football Madness!**
 
-Dashboard available at: https://ccre.shinyapps.io/football/
+Dashboard is available at: https://ccre.shinyapps.io/football/
 
 Dashboard is updated "on demand"; we may convert this to automatic every few hours on Saturdays.
 
