@@ -1,4 +1,5 @@
 devtools::install_github("sportsdataverse/cfbfastR")
+
 library(cfbfastR)
 library(dplyr) 
 library(poibin) # poisson normal distribution
@@ -65,6 +66,7 @@ output <- all_teams |>
 get_probs <- function(the_day = '2026-08-30', id = 235) {
   {games |> 
       filter(home_id==id | away_id==id) |>
+      arrange(start_date) |>
       mutate(prob = ifelse(home_id==id, home_prob, away_prob)) |>
       mutate(winner = case_when(
         !completed ~ NA,
@@ -72,9 +74,10 @@ get_probs <- function(the_day = '2026-08-30', id = 235) {
         away_id==id & away_points>home_points ~ 1,
         .default = 0)) |>
       mutate(prob = case_when(
-        (day >= the_day) ~ prob,
-        !completed ~ prob,
-        .default = winner)) |>
+        day >= the_day ~ prob,            
+        completed & day < the_day ~ winner, 
+        .default = prob                    
+      )) |>
       mutate(the_day = the_day) |>
       select(prob) |>
       as.vector()}$prob
@@ -92,7 +95,7 @@ historicalprobs <- do.call(bind_rows, lapply(days$day,function(z){
   scenarios <- expand.grid(rep(list(c(-1, 1)), 20))
   probmatrix <- scenarios
   for (i in 1:length(probs)) {probmatrix[,i] <- probmatrix[,i]*probs[i]}
-  for (i in 1:length(probs)) {probmatrix[,i] <- probmatrix[,i] + ifelse(probmatrix[,i]<0,1,0)}
+  for (i in 1:length(probs)) {probmatrix[,i] <- probmatrix[,i] + ifelse(probmatrix[,i]<=0,1,0)}
   scenario_probs <- apply(probmatrix,1,prod)
   scenario_winners$scenarioprob <- scenario_probs[scenario_winners$scenario]
   scenario_winners$totalprob <- scenario_winners$prob * scenario_winners$scenarioprob
