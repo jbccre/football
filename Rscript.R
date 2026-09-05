@@ -1,8 +1,5 @@
 devtools::install_github("sportsdataverse/cfbfastR")
 library(cfbfastR)
-if (Sys.getenv("CFBD_API_KEY") == "") {
-  stop("CFBD_API_KEY is missing from the environment!")
-}
 library(dplyr) 
 library(poibin) # poisson normal distribution
 library(tidyr) 
@@ -54,7 +51,8 @@ days <- games |>
   select(day) |>
   bind_rows(data.frame(day=current_date)) |>
   filter(day<=current_date) |>
-  arrange(day)
+  arrange(day) |>
+  distinct()
 
 # probability of each team exceeding cutoff each day
 output <- all_teams |>
