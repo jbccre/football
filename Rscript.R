@@ -135,7 +135,7 @@ teams_table <- left_join(tibble(value=all_teams$team[match(team_ids, all_teams$i
 players_table <- qualtrics_transformed |>
   relocate(name, .before=1) |>
   mutate(across(-name, ~ifelse(.x==1,">",ifelse(.x==0,"<",.x)))) |>
-  left_join({historicalprobs |> filter(day==max(day)) |> arrange(desc(prob)) |> mutate(rank = match(prob, prob)) |> mutate(label=gsub(".*:","",label)) |>  mutate(expected_value = prob*5*25) |> select(name=bracketname, rank, prob=label, expected_value)}) |>
+  left_join({historicalprobs |> filter(day==max(day)) |> arrange(desc(prob)) |> mutate(rank = match(prob, prob)) |> mutate(label=gsub(".*:","",label)) |>  mutate(expected_value = prob*5*25) |> select(name=bracketname, rank, prob, expected_value)}) |>
   arrange(rank) |>
   relocate(c(name,rank,prob,expected_value),.before=1) 
 

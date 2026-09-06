@@ -22,12 +22,16 @@ ole_miss <- read_csv("https://raw.githubusercontent.com/jbccre/football/main/qua
 
 historical_plot <- ggplot(historicalprobs, aes(x = day, y = prob, color=bracketname, group=bracketname,text = label)) +
   geom_line() +
-  scale_y_continuous(labels=scales::percent) 
+  scale_y_continuous(labels=scales::percent) +
+  scale_x_date(breaks = unique(historicalprobs$day)) +
+  theme(axis.text.x = element_text(angle=90)) +
+  labs(x='',y='Probability of Winning')
 
 teams_table <-   datatable(teams_table,
   colnames = c("Team", "Games Won", "Games Lost", "Cutoff",  'Probability of Over', 'Probability of Under', "Points"),
   rownames = FALSE, escape = FALSE, options = list(paging=FALSE,searching=FALSE,info=FALSE,scrollY='300px', scrollX= TRUE, pageLength=10)) |>
-  formatStyle(columns=2:7,textAlign='right')
+  formatStyle(columns=2:7,textAlign='right') |>
+  formatPercentage(5:6, digits=2)
 
 players_table <- datatable(players_table,
     colnames=c("Bracket","Rank","Probability","Expected Value", team_names),
@@ -36,7 +40,9 @@ players_table <- datatable(players_table,
     columns = 2:29,
     textAlign = 'right',
     backgroundColor = styleEqual(c(">", "<"), c("lightgreen", "#ff9999"))
-  )
+  ) |>
+  formatCurrency(4) |>
+  formatPercentage(3, digits=2)
 
 ui <- fluidPage(
   titlePanel("Football Madness 2026"),
