@@ -128,8 +128,8 @@ teams_table <- left_join(tibble(value=all_teams$team[match(team_ids, all_teams$i
   mutate(won = ifelse(is.na(won),0,won)) |>
   mutate(lost = ifelse(is.na(lost),0,lost)) |>
   mutate(cutoff = c(7.5,4.5,5.5,7.5,8.5,10.5,9.5,7.5,7.5,5.5,7.5,6.5,9.5,7.5,7.5,7.5,8.5,6.5,7.5,5.5)) |>
-  mutate(probability_over = paste0(sprintf("%.2f",100*output$prob[output$day==max(output$day)]),"%")) |>
-  mutate(probability_under = paste0(sprintf("%.2f",100*(1-output$prob[output$day==max(output$day)])),"%")) |>
+  mutate(probability_over = output$prob[output$day==max(output$day)]) |>
+  mutate(probability_under = 1-output$prob[output$day==max(output$day)]) |>
   mutate(points = c(rep(2,times=5),rep(1,times=15)))
 
 players_table <- qualtrics_transformed |>
@@ -137,7 +137,6 @@ players_table <- qualtrics_transformed |>
   mutate(across(-name, ~ifelse(.x==1,">",ifelse(.x==0,"<",.x)))) |>
   left_join({historicalprobs |> filter(day==max(day)) |> arrange(desc(prob)) |> mutate(rank = match(prob, prob)) |> mutate(label=gsub(".*:","",label)) |>  mutate(expected_value = prob*5*25) |> select(name=bracketname, rank, prob=label, expected_value)}) |>
   arrange(rank) |>
-  relocate(c(name,rank,prob,expected_value),.before=1) |>
-  mutate(expected_value = paste0("$",sprintf("%.2f",expected_value)))
+  relocate(c(name,rank,prob,expected_value),.before=1) 
 
 save(historicalprobs, teams_table, players_table, team_names, file = 'github.Rdata')
