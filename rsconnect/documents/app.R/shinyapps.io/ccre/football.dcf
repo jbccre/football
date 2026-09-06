@@ -1,0 +1,10 @@
+name: football
+title:
+username: ccre
+account: ccre
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 17785182
+bundleId: 12515521
+url: https://ccre.shinyapps.io/football/
+version: 1

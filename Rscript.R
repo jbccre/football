@@ -115,9 +115,9 @@ winners_losers <- games |>
   mutate(loser = case_when(
     !completed ~ NA,
     home_points<away_points~home_team,
-    away_points>home_points~away_team,
+    away_points<home_points~away_team,
     .default=NA
-  )) |>
+  )) |> 
   filter(!is.na(winner)) |>
   select(winner,loser) |>
   pivot_longer(cols=1:2) |>
