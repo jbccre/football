@@ -1,5 +1,6 @@
 devtools::install_github("sportsdataverse/cfbfastR")
 
+# setwd("C:/football/football")  # for testing
 library(cfbfastR)
 library(dplyr) 
 library(poibin) # poisson normal distribution
@@ -19,7 +20,7 @@ schedule |> filter(season_type=='regular') |>
   mutate(type = 'home') |>
   bind_rows({schedule |> mutate(type='away') |> select(start_date, id = away_id, team = away_team, elo = away_pregame_elo, type)}) |>
   filter(!is.na(elo)) |>
-  arrange(desc(start_date)) |>
+  arrange(start_date) |>
   filter(!duplicated(team)) |>
   mutate(elo=case_when(type=='home' ~ elo - 50, .default = elo))  |>
   select(!c(start_date,season_type,type))
@@ -36,9 +37,6 @@ games <- schedule |>
   mutate(away_elo = case_when(is.na(away_elo) ~ 1300, .default = away_elo)) |>
   # add home team advantage
   mutate(home_elo = home_elo + 50) |>
-  # if pregame elo known, use that, otherwise use generic team elo
-  mutate(home_elo = case_when(!is.na(home_pregame_elo) ~ home_pregame_elo, .default = home_elo)) |>
-  mutate(away_elo = case_when(!is.na(away_pregame_elo) ~ away_pregame_elo, .default = away_elo)) |>
   # set probabilities
   mutate(home_prob = 1/(1 + 10^((away_elo-home_elo)/400))) |>
   mutate(away_prob = 1-home_prob) |>
@@ -74,8 +72,8 @@ get_probs <- function(the_day = '2026-08-30', id = 235) {
         away_id==id & away_points>home_points ~ 1,
         .default = 0)) |>
       mutate(prob = case_when(
-        day >= the_day ~ prob,            
-        completed & day < the_day ~ winner, 
+        day > the_day ~ prob,            
+        completed & day <= the_day ~ winner, 
         .default = prob                    
       )) |>
       mutate(the_day = the_day) |>
