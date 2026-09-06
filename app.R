@@ -23,9 +23,9 @@ ole_miss <- read_csv("https://raw.githubusercontent.com/jbccre/football/main/qua
 historical_plot <- ggplot(historicalprobs, aes(x = day, y = prob, color=bracketname, group=bracketname,text = label)) +
   geom_line() +
   scale_y_continuous(labels=scales::percent) +
-  scale_x_date(breaks = unique(historicalprobs$day)) +
+  scale_x_date(breaks = unique(historicalprobs$day), date_labels="%b %e") +
   theme(axis.text.x = element_text(angle=90)) +
-  labs(x='',y='Probability of Winning')
+  labs(x='',y='Probability of Winning', color = 'Bracket', group = 'Bracket')
 
 teams_table <-   datatable(teams_table,
   colnames = c("Team", "Games Won", "Games Lost", "Cutoff",  'Probability of Over', 'Probability of Under', "Points"),
