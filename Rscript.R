@@ -90,10 +90,8 @@ output$prob <- sapply(1:nrow(output), function(z){1 - ppoibin(kk = output$cutoff
 # all scenarios
 historicalprobs <- do.call(bind_rows, lapply(days$day,function(z){
   probs <- output$prob[output$day==z]
-  scenarios <- expand.grid(rep(list(c(-1, 1)), 20))
-  probmatrix <- scenarios
-  for (i in 1:length(probs)) {probmatrix[,i] <- probmatrix[,i]*probs[i]}
-  for (i in 1:length(probs)) {probmatrix[,i] <- probmatrix[,i] + ifelse(probmatrix[,i]<=0,1,0)}
+  scenarios <- expand.grid(rep(list(c(0, 1)), 20))
+  probmatrix <- sapply(seq_along(probs), function(i) {ifelse(scenarios[[i]] == 1, probs[i], 1 - probs[i])})
   scenario_probs <- apply(probmatrix,1,prod)
   scenario_winners$scenarioprob <- scenario_probs[scenario_winners$scenario]
   scenario_winners$totalprob <- scenario_winners$prob * scenario_winners$scenarioprob
